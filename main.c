@@ -15,7 +15,9 @@
 #include "rfid.h"
 #include "bcm2835.h"
 #include "config.h"
-#define PIN RPI_GPIO_P1_11
+#define PIN RPI_GPIO_P1_11  // Asignacion del primer relee
+#define PIN1 RPI_GPIO_P1_16  // Asignacion del primer relee
+#define PIN2 RPI_GPIO_P1_18  // Asignacion del primer relee
 
 uint8_t HW_init(uint32_t spi_speed, uint8_t gpio);
 void usage(char *);
@@ -46,16 +48,20 @@ int main(int argc, char *argv[]) {
 	uint8_t use_gpio=0;
 	uint8_t gpio=255;
 	uint32_t spi_speed=100000000L;
-	
+	// largo de los strings
 	char tarjeta1[4];
 	char tarjeta2[4];
+	char tarjeta3[4];
+	char tarjeta4[4];
 	
+	// asignaciones de los valores para cada tarjeta
+	tarjeta1[1]='d'; tarjeta1[2]='d';
 	
-	tarjeta1[1]='d';
-	tarjeta1[2]='d';
+	tarjeta2[1]='0'; tarjeta2[2]='5';
 	
-	tarjeta2[1]='0';
-	tarjeta2[2]='5';
+	tarjeta3[1]='5'; tarjeta3[2]='d';
+	
+	//tarjeta4[1]='5'; tarjeta4[2]='5';
 	
 	if (argc>1) {
 		if (strcmp(argv[1],"-d")==0) {debug=1;
@@ -127,25 +133,57 @@ int main(int argc, char *argv[]) {
 		//printf(" numeros %c,%c \n",sn_str[1],sn_str[2]);
 		//printf(" * numeros %c,%c \n",tarjeta1[1],tarjeta1[2]);
 		if (sn_str[1]==tarjeta1[1] && sn_str[2]==tarjeta1[2]){
-			printf(" * tarjeta 1 \n");
+			printf("\n Acceso Condesido para Tarjeta 1 \n");
 			// Turn it on
-				bcm2835_gpio_write(PIN, HIGH);
+			bcm2835_gpio_write(PIN, HIGH);
 				
-				// wait a bit
-				bcm2835_delay(800);
+			// wait a bit
+			bcm2835_delay(800);
 					
-				// turn it off
-				bcm2835_gpio_write(PIN, LOW);
+			// turn it off
+			bcm2835_gpio_write(PIN, LOW);
 					
-				// wait a bit
-				//bcm2835_delay(500);
-				}
-
-			int contador;
-			for(contador=0;contador<6; contador++){
-				
-				
 			}
+		else if (sn_str[1]==tarjeta2[1] && sn_str[2]==tarjeta2[2]){
+			printf("\n Acceso Condesido para Tarjeta 2 \n");
+			// Turn it on
+			bcm2835_gpio_write(PIN1, HIGH);
+				
+			// wait a bit
+			bcm2835_delay(800);
+					
+			// turn it off
+			bcm2835_gpio_write(PIN1, LOW);
+					
+			}
+		else if (sn_str[1]==tarjeta3[1] && sn_str[2]==tarjeta3[2]){
+			printf("\n Acceso Condesido para Tarjeta 3 \n");
+			// Turn it on
+			bcm2835_gpio_write(PIN2, HIGH);
+				
+			// wait a bit
+			bcm2835_delay(800);
+					
+			// turn it off
+			bcm2835_gpio_write(PIN2, LOW);
+					
+			}
+		else if (sn_str[1]==tarjeta4[1] && sn_str[2]==tarjeta4[2]){
+			printf("\n Acceso Condesido para Tarjeta 4 \n");
+			// Turn it on
+			bcm2835_gpio_write(PIN, HIGH);
+				
+			// wait a bit
+			bcm2835_delay(800);
+					
+			// turn it off
+			bcm2835_gpio_write(PIN, LOW);
+					
+			}
+		else{
+			printf("\n\n Acceso denegado \n\n Comuniquese con el ADMINISTRADOR !!!\n\n");
+			}
+
 		}
 		*(p++)=']';
 		*(p++)=0;
@@ -291,7 +329,9 @@ uint8_t HW_init(uint32_t spi_speed, uint8_t gpio) {
 	bcm2835_spi_chipSelect(BCM2835_SPI_CS0);                      // The default
 	bcm2835_spi_setChipSelectPolarity(BCM2835_SPI_CS0, LOW);      // the default
 	
-	bcm2835_gpio_fsel(PIN, BCM2835_GPIO_FSEL_OUTP);				  // para el blink
+	bcm2835_gpio_fsel(PIN, BCM2835_GPIO_FSEL_OUTP);				  // para abrir el primer acceso
+	bcm2835_gpio_fsel(PIN1, BCM2835_GPIO_FSEL_OUTP);			  // para abrir el segundo acceso
+	bcm2835_gpio_fsel(PIN2, BCM2835_GPIO_FSEL_OUTP);			  // para abrir el tercer acceso
 	
 	return 0;
 }
