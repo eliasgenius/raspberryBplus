@@ -1,0 +1,11 @@
+gcc config.c rfid.c rc522.c main.c -o rc522_reader -lbcm2835
+
+./rc522_reader -d
+
+./rc522_reader -d 2>&1 | awk'{print $5}' | cut -d '=' -f 2
+
+./rc522_reader -d 2>&1 | awk`{print $5}` | cut -d `=` -f 2
+`
+
+
+d44687c
